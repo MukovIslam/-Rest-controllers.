@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/styles.css"> <!-- Подключение CSS файла -->
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div>
+            <span id="userEmail" class="navbar-text h3 text-white"></span>
+            <span class="font-weight-normal text-white h4"> with roles: </span>
+            <p class="navbar-brand mb-0 h1">
+                <span id="userRoles" class="navbar-brand mb-0 h1 font-weight-normal"></span>
+            </p>
+        </div>
+        <a class="nav-link text-muted" href="/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container-fluid bg-light">
+    <div class="row">
+        <ul id="roles-list" class="list-group col-md-3 py-3 bg-white current">
+            <!-- Роли будут загружены здесь с помощью AJAX -->
+        </ul>
+        <div id="content-area" class="col-md-9 bg-light py-3 ">
+            <style>
+                /* Дополнительные стили, если необходимо */
+                #content-area > div {
+                    display: none; /* По умолчанию скрыть все блоки */
+                }
+
+                #content-area > .active {
+                    display: block; /* Показать только активный блок */
+                }
+            </style>
+            <div id='div1'>
+                <h2>Admin panel</h2>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+                           role="tab"
+                           aria-controls="nav-home" aria-selected="true">Users table</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+                           role="tab"
+                           aria-controls="nav-profile" aria-selected="false">New user</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-header">
+                            All users
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm">
+
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Age</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="adminTableBody2">
+                                    <!--                                                js-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class="card-header">
+                            Add new user
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <form class="text-center col-md-6 mx-auto" id="addUserForm">"
+                                    <div class="form-group">
+                                        <label for="username">First name</label>
+                                        <input type="text" class="form-control" id="username" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last name</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="age">Age</label>
+                                        <input type="text" class="form-control" id="age" name="age">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email address:</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password:</label>
+                                        <input type="password" class="form-control" id="password" name="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newRoles">Role :</label>
+                                        <select id="newRoles" name="roles" multiple class="form-control">
+                                            <option value="ADMIN">ADMIN</option>
+                                            <option value="USER">USER</option>
+                                        </select><br><br>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success">Add new user</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id='div2'>
+                <h2>User information-page</h2>
+                <div class="card">
+                    <div class="card-header">
+                        About user
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Age</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                <!--                                                js-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id='div3'>
+                <h2>Default Dashboard</h2>
+                <p>Default content goes here.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="deleteUserModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" method="POST" action="/api/user/">
+                    <div class="form-group">
+                        <label for="usernameDelete">First name</label>
+                        <input type="text" class="form-control" id="usernameDelete" name="firstName" readonly>
+                        <label for="lastNameDelete">Last name</label>
+                        <input type="text" class="form-control" id="lastNameDelete" name="lastName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="ageDelete">Age</label>
+                        <input type="text" class="form-control" id="ageDelete" name="age" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailDelete">Email address:</label>
+                        <input type="email" class="form-control" id="emailDelete" name="email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="rolesDelete">Role</label>
+                        <select multiple class="form-control" id="rolesDelete" name="roles" readonly></select>
+                    </div>
+                    <input type="hidden" id="userIdDelete" name="userId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" form="deleteForm">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUserModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModal">Edit user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-edit">
+                <div class="row">
+
+                    <form class="text-center col-md-6 mx-auto" id="editForm">"
+                        <div class="form-group">
+                            <label for="editusername">First name</label>
+                            <input type="text" class="form-control" id="editusername" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="editlastName">Last name</label>
+                            <input type="text" class="form-control" id="editlastName" name="lastName">
+                        </div>
+                        <input type="hidden" id="userid" name="id"> <!-- Скрытое поле для id -->
+                        <div class="form-group">
+                            <label for="editage">Age</label>
+                            <input type="text" class="form-control" id="editage" name="age">
+                        </div>
+                        <div class="form-group">
+                            <label for="editemail">Email address:</label>
+                            <input type="email" class="form-control" id="editemail" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="editpassword">Password:</label>
+                            <input type="password" class="form-control" id="editpassword" name="password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rolesEdit">Роли</label>
+                            <select multiple class="form-control" id="rolesEdit">
+                                <!-- Опции будут добавлены динамически с помощью JavaScript -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-info" form="editForm">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/addNewUser.js" defer></script>
+</body>
+</html>
